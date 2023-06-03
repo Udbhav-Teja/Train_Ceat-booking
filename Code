@@ -1,1 +1,143 @@
+import requests
+import json
 
+def get_trains(source, destination, date):
+    """
+    Gets a list of trains from the source to the destination on the given date.
+
+    Args:
+        source (str): The source station.
+        destination (str): The destination station.
+        date (str): The date of travel.
+
+    Returns:
+        list: A list of trains.
+    """
+
+    url = "https://api.railwayapi.com/v2/trains/between/" + source + "/" + destination + "/" + date
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = json.loads(response.content)
+        return data["trains"]
+    else:
+        print("Error getting trains:", response.status_code)
+        return None
+
+def book_seat(train_id, coach, seat_number):
+    """
+    Books a seat on the given train.
+
+    Args:
+        train_id (str): The train ID.
+        coach (str): The coach number.
+        seat_number (str): The seat number.
+
+    Returns:
+        bool: Whether the seat was successfully booked.
+    """
+
+    url = "https://api.railwayapi.com/v2/trains/book/" + train_id + "/" + coach + "/" + seat_number
+    response = requests.post(url)
+    if response.status_code == 200:
+        data = json.loads(response.content)
+        return data["success"]
+    else:
+        print("Error booking seat:", response.status_code)
+        return False
+
+def main():
+    source = input("Enter the source station: ")
+    destination = input("Enter the destination station: ")
+    date = input("Enter the date of travel (YYYY-MM-DD): ")
+
+    trains = get_trains(source, destination, date)
+    if trains is None:
+        return
+
+    for train in trains:
+        print("Train ID:", train["train_id"])
+        print("Train name:", train["name"])
+        print("Coaches:", train["coaches"])
+        print()
+
+    train_id = input("Enter the train ID: ")
+    coach = input("Enter the coach number: ")
+    seat_number = input("Enter the seat number: ")
+
+    success = book_seat(train_id, coach, seat_number)
+    if success:
+        print("Seat booked successfully!")
+    else:
+        print("Error booking seat.")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+OR
+
+
+
+
+
+import csv
+
+class TrainSeatBookingSystem:
+    def __init__(self, num_rows, seats_per_row):
+        self.num_rows = num_rows
+        self.seats_per_row = seats_per_row
+        self.seat_map = [[False] * seats_per_row for _ in range(num_rows)]
+        self.booking_data = []
+
+    def display_seat_map(self):
+        print("Train Seat Map:")
+        for row in range(self.num_rows):
+            for seat in range(self.seats_per_row):
+                if self.seat_map[row][seat]:
+                    print("X", end=" ")
+                else:
+                    print("O", end=" ")
+            print()
+        print()
+
+    def book_seat(self, passenger_name, row, seat):
+        if row < 0 or row >= self.num_rows or seat < 0 or seat >= self.seats_per_row:
+            print("Invalid seat selection. Please try again.")
+            return False
+
+        if self.seat_map[row][seat]:
+            print("Seat already booked. Please select another seat.")
+            return False
+
+        self.seat_map[row][seat] = True
+        self.booking_data.append({
+            'Passenger Name': passenger_name,
+            'Row': row + 1,
+            'Seat': seat + 1
+        })
+        print(f"Seat ({row+1}, {seat+1}) booked successfully for {passenger_name}.")
+        return True
+
+    def save_booking_data(self, filename):
+        with open(filename, 'w', newline='') as file:
+            fieldnames = ['Passenger Name', 'Row', 'Seat']
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(self.booking_data)
+
+
+# Example usage
+seat_booking_system = TrainSeatBookingSystem(5, 4)
+seat_booking_system.display_seat_map()
+
+seat_booking_system.book_seat("John Doe", 2, 1)
+seat_booking_system.book_seat("Jane Smith", 0, 2)
+seat_booking_system.book_seat("Mark Johnson", 3, 3)
+
+seat_booking_system.display_seat_map()
+
+seat_booking_system.save_booking_data("booking_data.csv")
