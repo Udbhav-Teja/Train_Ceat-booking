@@ -6,9 +6,9 @@ The Train Seat Booking Application is a software system that utilizes Machine Le
 ## Table of Contents
 1. Introduction
 2. Features
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Machine Learning Algorithms](#machine-learning-algorithms)
+3. Installation
+4. Usage
+5. Machine Learning Algorithms
 6. [Data Collection and Processing](#data-collection-and-processing)
 7. [Model Training and Optimization](#model-training-and-optimization)
 8. [Contributing](#contributing)
