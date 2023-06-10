@@ -132,6 +132,62 @@ class TrainSeatBookingSystem:
             writer.writerows(self.booking_data)
 
 
+
+
+
+
+OR
+
+
+[THIS IS FOR MOVIE TICKET BOOKING]
+
+
+class SeatBookingSystem:
+    def __init__(self, num_rows, num_seats_per_row):
+        self.num_rows = num_rows
+        self.num_seats_per_row = num_seats_per_row
+        self.seats = [[False] * num_seats_per_row for _ in range(num_rows)]
+
+    def display_seats(self):
+        print("Current seat status:")
+        for row in range(self.num_rows):
+            for seat in range(self.num_seats_per_row):
+                if self.seats[row][seat]:
+                    print("X", end=" ")
+                else:
+                    print("O", end=" ")
+            print()
+
+    def book_seat(self, row, seat):
+        if row < 0 or row >= self.num_rows or seat < 0 or seat >= self.num_seats_per_row:
+            print("Invalid seat selection. Please try again.")
+        elif self.seats[row][seat]:
+            print("This seat is already booked. Please select another seat.")
+        else:
+            self.seats[row][seat] = True
+            print(f"Seat {row + 1}-{seat + 1} has been successfully booked.")
+
+# Example usage
+booking_system = SeatBookingSystem(5, 6)
+
+while True:
+    print("\n1. Display seat status")
+    print("2. Book a seat")
+    print("3. Exit")
+
+    choice = input("Enter your choice (1-3): ")
+
+    if choice == "1":
+        booking_system.display_seats()
+    elif choice == "2":
+        row = int(input("Enter the row number: ")) - 1
+        seat = int(input("Enter the seat number: ")) - 1
+        booking_system.book_seat(row, seat)
+    elif choice == "3":
+        break
+    else:
+        print("Invalid choice. Please try again.")
+
 # Example usage
 seat_booking_system = TrainSeatBookingSystem(5, 4)
 seat_booking_system.display_seat_map()
